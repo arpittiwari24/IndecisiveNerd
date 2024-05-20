@@ -25,7 +25,7 @@ Nodejs , Expressjs and MongoDB for the backend , html , tailwindcss and javascri
 Clone the project
 
 ```bash
-  git clone https://github.com/arpittiwari24/YesNo.git
+  git clone https://github.com/arpittiwari24/IndecisiveNerd.git
 ```
 
 Go to the project directory
