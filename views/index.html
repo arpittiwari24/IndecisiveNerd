@@ -21,7 +21,7 @@
 
         #product_description {
               word-break: break-word;
-  overflow-wrap: break-word;
+              overflow-wrap: break-word;
         }
    
     </style>
@@ -48,14 +48,11 @@
                         <button class="btn btn-sm btn-circle  absolute right-2 top-2">✕</button>
                     </form>
                     <!-- Form inside modal with HTMX -->
-                    <form id="newProduct" class="flex flex-col align-center justify-center gap-4 p-4"
-                        enctype="application/x-www-form-urlencoded" hx-post="/new" hx-trigger="submit"
-                        onsubmit="return validateDescription()"
-                        hx-on:htmx:after-request="if (event.detail.xhr.status === 200) {  resetForm(newProduct) ; closeModal(); showToast(`Product added successfully`); window.location.reload()}">
-                        <input type="text" name="description" id="description" minlength="60"
-                            placeholder="Enter description (minimum 60 characters)" required
+                    <form id="newProduct" class="flex flex-col align-center justify-center gap-4 p-4">
+                        <input type="text" name="description" id="description" minlength="40"
+                            placeholder="Enter description (minimum 40 characters)" required
                             class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
-                        <span id="error-message" class="text-red-500 text-sm hidden">Description must be at least 60
+                        <span id="error-message" class="text-red-500 text-sm hidden">Description must be at least 40
                             characters long.</span>
                         <button type="submit" class="btn btn-secondary">Add</button>
                     </form>
@@ -208,6 +205,26 @@
             }
         }
         validateDescription()
+
+        document.getElementById("newProduct").addEventListener("submit",async (e) => {
+            e.preventDefault()
+            try {
+                const description = document.getElementById("description").value
+
+               const response =  await fetch("/new", {
+                    method: "POST",
+                    headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({ description: description })
+                })
+                if(response.status === 201) {
+                    resetForm(newProduct) ; showSuccessToast(`Problem added successfully`); closeModal();  window.location.reload();
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        })
     </script>
 </body>
 
